@@ -56,7 +56,7 @@ const Card = () => {
     return (
         <div>
            <Header/>
-           <section className='bg-[url("http://localhost:3000/images/banner/shop.png")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
+           <section className='bg-[url("http://localhost:3000/images/banner/products.png")] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left'>
             <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
                 <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
                     <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
@@ -105,8 +105,8 @@ const Card = () => {
 
    <div className='flex justify-between w-5/12 sm:w-full sm:mt-3'>
        <div className='pl-4 sm:pl-0'>
-           <h2 className='text-lg text-orange-500'>${pt.productInfo.price - Math.floor((pt.productInfo.price * pt.productInfo.discount) / 100)}</h2>
-           <p className='line-through'>${pt.productInfo.price}</p>
+           <h2 className='text-lg text-orange-500'>{pt.productInfo.price - Math.floor((pt.productInfo.price * pt.productInfo.discount) / 100)} DA</h2>
+           <p className='line-through'>{pt.productInfo.price} DA</p>
            <p>-{pt.productInfo.discount}%</p>
        </div>
        <div className='flex gap-2 flex-col'>
@@ -147,8 +147,8 @@ const Card = () => {
 
    <div className='flex justify-between w-5/12 sm:w-full sm:mt-3'>
        <div className='pl-4 sm:pl-0'>
-           <h2 className='text-lg text-orange-500'>${p.products[0].price - Math.floor((p.products[0].price * p.products[0].discount) / 100 )}</h2>
-           <p className='line-through'>${p.products[0].price}</p>
+           <h2 className='text-lg text-orange-500'>{p.products[0].price - Math.floor((p.products[0].price * p.products[0].discount) / 100 )} DA</h2>
+           <p className='line-through'>{p.products[0].price} DA</p>
            <p>-{p.products[0].discount}%</p>
        </div>
        <div className='flex gap-2 flex-col'>
@@ -180,20 +180,20 @@ const Card = () => {
                 <h2 className='text-xl font-bold'>Order Summary</h2>
                 <div className='flex justify-between items-center'>
                     <span>{buy_product_item} Items </span>
-                    <span>${price} </span>
+                    <span>{price} DA</span>
                 </div>
                 <div className='flex justify-between items-center'>
                     <span>Shipping Fee </span>
-                    <span>${shipping_fee} </span>
+                    <span>{shipping_fee} DA </span>
                 </div>
-                <div className='flex gap-2'>
+               {/* <div className='flex gap-2'>
                 <input className='w-full px-3 py-2 border border-slate-200 outline-0 focus:border-green-500 rounded-sm' type="text" placeholder='Input Vauchar Coupon' />
                 <button className='px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm'>Apply</button>
-                </div>
+                </div>*/}
 
                 <div className='flex justify-between items-center'>
                     <span>Total</span>
-                    <span className='text-lg text-[#059473]'>${price + shipping_fee} </span>
+                    <span className='text-lg text-[#059473]'>{price + shipping_fee} DA</span>
                 </div>
                 <button onClick={redirect} className='px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-red-500 text-sm text-white uppercase '>
                     Process to Checkout ({buy_product_item})

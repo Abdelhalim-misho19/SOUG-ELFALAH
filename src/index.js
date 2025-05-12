@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import { Toaster } from 'react-hot-toast';
+import './i18n';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

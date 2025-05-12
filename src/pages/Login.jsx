@@ -1,130 +1,163 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaFacebookF } from "react-icons/fa6";
-import { FaGoogle } from "react-icons/fa6"; 
+import { FaFacebookF, FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { customer_login,messageClear } from '../store/reducers/authReducer';
+import { customer_login, messageClear } from '../store/reducers/authReducer';
 import toast from 'react-hot-toast';
 import { FadeLoader } from 'react-spinners';
+import { useTranslation } from 'react-i18next';
+
+const themeColors = {
+    primary: 'green-700', primaryHover: 'green-800',
+    secondaryBg: 'stone-100', cardBg: 'white',
+    textPrimary: 'slate-800', textSecondary: 'slate-600',
+    inputBorder: 'gray-300', inputFocusBorder: 'green-600',
+    linkColor: 'green-700', linkHoverColor: 'green-800',
+};
 
 const Login = () => {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { loader, errorMessage, successMessage, userInfo } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
 
-    const navigate = useNavigate()
-    const {loader,errorMessage,successMessage,userInfo } = useSelector(state => state.auth)
-    const dispatch = useDispatch()
+    const [state, setState] = useState({ email: '', password: '' });
+    const [showPassword, setShowPassword] = useState(false);
 
-    const [state, setState] = useState({ 
-        email: '',
-        password: ''
-    })
+    const inputHandle = (e) => { setState({ ...state, [e.target.name]: e.target.value }); };
+    const login = (e) => { e.preventDefault(); dispatch(customer_login(state)); };
 
-    const inputHandle = (e) => {
-        setState({
-            ...state,
-            [e.target.name]: e.target.value
-        })
-    }
- 
-    const login = (e) => {
-        e.preventDefault()
-        dispatch(customer_login(state))
-    }
-
-    useEffect(() => { 
-        if (successMessage) {
-            toast.success(successMessage)
-            dispatch(messageClear())  
-        } 
-        if (errorMessage) {
-            toast.error(errorMessage)
-            dispatch(messageClear())  
-        } 
-        if (userInfo) {
-            navigate('/')
-        }
-    },[successMessage,errorMessage])
-
+    useEffect(() => {
+        if (successMessage) { toast.success(successMessage); dispatch(messageClear()); }
+        if (errorMessage) { toast.error(errorMessage); dispatch(messageClear()); }
+        if (userInfo) { navigate('/'); }
+    }, [successMessage, errorMessage, userInfo, navigate, dispatch]);
 
     return (
-        <div>
-             {
-                loader && <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
-                    <FadeLoader/>
+        <div className={`bg-${themeColors.secondaryBg} min-h-screen flex flex-col`}>
+            {loader && ( <div className='fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-[999] backdrop-blur-sm'><FadeLoader color={themeColors.primary} /></div> )}
+            <Header />
+            <main className="flex-grow container mx-auto px-4 py-12 md:py-16 flex items-center justify-center">
+                <div className={`w-full max-w-4xl bg-${themeColors.cardBg} rounded-xl shadow-2xl overflow-hidden grid md:grid-cols-2`}>
+                    {/* Login Form Section */}
+                    <div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+                        <h2 className={`text-2xl md:text-3xl font-bold text-${themeColors.textPrimary} text-center mb-6 md:mb-8`}>{t('login_page.title')}</h2>
+                        <form onSubmit={login} className='space-y-5'>
+                            {/* Email */}
+                            <div>
+                                <label htmlFor="email" className={`block text-sm font-medium text-${themeColors.textSecondary} mb-1`}>{t('login_page.form.email_label')}</label>
+                                <input
+                                    onChange={inputHandle}
+                                    value={state.email}
+                                    className={`w-full px-4 py-2.5 border border-${themeColors.inputBorder} rounded-lg outline-none focus:border-${themeColors.inputFocusBorder} focus:ring-1 focus:ring-${themeColors.inputFocusBorder} transition duration-200 ease-in-out`}
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder={t('login_page.form.email_placeholder')}
+                                    required
+                                />
+                            </div>
+                            {/* Password */}
+                            <div className="relative">
+                                <label htmlFor="password" className={`block text-sm font-medium text-${themeColors.textSecondary} mb-1`}>{t('login_page.form.password_label')}</label>
+                                <input
+                                    onChange={inputHandle}
+                                    value={state.password}
+                                    className={`w-full px-4 py-2.5 border border-${themeColors.inputBorder} rounded-lg outline-none focus:border-${themeColors.inputFocusBorder} focus:ring-1 focus:ring-${themeColors.inputFocusBorder} transition duration-200 ease-in-out pr-10`}
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    id="password"
+                                    placeholder={t('login_page.form.password_placeholder')}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 top-6 pr-3 flex items-center text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    aria-label={t(showPassword ? 'login_page.form.hide_password' : 'login_page.form.show_password')}
+                                >
+                                    {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                                </button>
+                            </div>
+                            {/* Forgot Password Link */}
+                            <div className="text-right -mt-2">
+                                <Link to="/forgot-password" className={`text-sm font-medium text-${themeColors.linkColor} hover:text-${themeColors.linkHoverColor} hover:underline`}>
+                                    {t('login_page.form.forgot_password')}
+                                </Link>
+                            </div>
+                            {/* Submit Button */}
+                            <button
+                                disabled={loader}
+                                className={`w-full mt-1 px-6 py-3 bg-${themeColors.primary} text-white font-semibold rounded-lg shadow-md hover:bg-${themeColors.primaryHover} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${themeColors.primary} transition duration-200 ease-in-out disabled:opacity-60`}
+                            >
+                                {loader ? t('login_page.form.logging_in') : t('login_page.form.login_button')}
+                            </button>
+                        </form>
+
+                        {/* Divider & Social */}
+                        <div className="my-6 flex items-center justify-center gap-3">
+                            <div className={`h-px bg-${themeColors.inputBorder} flex-grow`}></div>
+                            <span className={`text-xs uppercase text-${themeColors.textSecondary} font-medium`}>{t('login_page.social_divider')}</span>
+                            <div className={`h-px bg-${themeColors.inputBorder} flex-grow`}></div>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                                disabled={loader}
+                                className="flex-1 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 flex justify-center items-center gap-2 text-sm font-medium transition duration-200 disabled:opacity-60"
+                            >
+                                <FaFacebookF size={16} /> {t('login_page.social.facebook')}
+                            </button>
+                            <button
+                                disabled={loader}
+                                className="flex-1 py-2.5 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 flex justify-center items-center gap-2 text-sm font-medium transition duration-200 disabled:opacity-60"
+                            >
+                                <FaGoogle size={16} /> {t('login_page.social.google')}
+                            </button>
+                        </div>
+
+                        {/* Register Link */}
+                        <p className={`mt-6 text-center text-sm text-${themeColors.textSecondary}`}>
+                            {t('login_page.register_prompt')} <Link to="/register" className={`font-medium text-${themeColors.linkColor} hover:text-${themeColors.linkHoverColor} hover:underline`}>{t('login_page.register_link')}</Link>
+                        </p>
+
+                        {/* Seller Links */}
+                        <div className="my-6 flex items-center justify-center gap-3">
+                            <div className={`h-px bg-${themeColors.inputBorder} flex-grow`}></div>
+                            <span className={`px-3 text-xs uppercase text-${themeColors.textSecondary} font-medium whitespace-nowrap`}>{t('login_page.seller_area')}</span>
+                            <div className={`h-px bg-${themeColors.inputBorder} flex-grow`}></div>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-3 text-sm">
+                            <a
+                                target='_blank'
+                                rel="noopener noreferrer"
+                                href="http://localhost:3001/login"
+                                className="flex-1 text-center py-2.5 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600 transition duration-200 font-medium"
+                            >
+                                {t('login_page.seller_login')}
+                            </a>
+                            <a
+                                target='_blank'
+                                rel="noopener noreferrer"
+                                href="http://localhost:3001/register"
+                                className="flex-1 text-center py-2.5 bg-purple-600 text-white rounded-lg shadow hover:bg-purple-700 transition duration-200 font-medium"
+                            >
+                                {t('login_page.seller_registration')}
+                            </a>
+                        </div>
+                    </div>
+                    {/* Image Section */}
+                    <div className='hidden md:block w-full h-full'>
+                        <img
+                            src="/images/falah.png"
+                            alt={t('login_page.image_alt')}
+                            className='w-full h-full object-cover'
+                        />
+                    </div>
                 </div>
-            }
-            <Header/>
-    <div className='bg-slate-200 mt-4'>
-        <div className='w-full justify-center items-center p-10'>
-            <div className='grid grid-cols-2 w-[60%] mx-auto bg-white rounded-md'>
-                <div className='px-8 py-8'>
-            <h2 className='text-center w-full text-xl text-slate-600 font-bold'>Login </h2> 
-
-    <div>
-        <form onSubmit={login} className='text-slate-600'>
-    
-
-    <div className='flex flex-col gap-1 mb-2'>
-        <label htmlFor="email">Email</label>
-        <input onChange={inputHandle} value={state.email}  className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md' type="email" name="email" id="email" placeholder='Email' required />
-    </div>
-
-
-    <div className='flex flex-col gap-1 mb-2'>
-        <label htmlFor="password">Password</label>
-        <input onChange={inputHandle} value={state.password}  className='w-full px-3 py-2 border border-slate-200 outline-none focus:border-green-500 rounded-md' type="password" name="password" id="password" placeholder='Password' required />
-    </div>
-
-    <button className='px-8 w-full py-2 bg-[#059473] shadow-lg hover:shadow-green-500/40 text-white rounded-md'>Login</button>
- 
-        </form>
-    <div className='flex justify-center items-center py-2'>
-        <div className='h-[1px] bg-slate-300 w-[95%]'> </div>
-        <span className='px-3 text-slate-600'>Or</span>
-        <div className='h-[1px] bg-slate-300 w-[95%]'> </div>
-    </div>
-
-    <button className='px-8 w-full py-2 bg-indigo-500 shadow hover:shadow-indigo-500/50 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-        <span><FaFacebookF /> </span>
-        <span>Login With Facebook </span>
-    </button>
-
-    <button className='px-8 w-full py-2 bg-red-500 shadow hover:shadow-red-500/50 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-        <span><FaGoogle  /></span>
-        <span>Login With Google </span>
-    </button> 
-    </div>    
-
-    <div className='text-center text-slate-600 pt-1'>
-        <p>Don't Have An Account ? <Link className='text-blue-500' to='/register'> Register</Link> </p>
-    </div> 
-
-     <a target='_blank' href="http://localhost:3001/login">
-     <div className='px-8 w-full py-2 bg-[#02e3e0] shadow hover:shadow-red-500/50 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-            Login As a Seller
-     </div>
-     </a>
- 
-     <a target='_blank' href="http://localhost:3001/register">
-     <div className='px-8 w-full py-2 bg-[#ad2cc4] shadow hover:shadow-red-500/50 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-            Register As a Seller
-     </div>
-     </a>
-
-
-
-            </div> 
-
-        <div className='w-full h-full py-4 pr-4'>
-            <img src="http://localhost:3000/images/login.jpg" alt="" />
-         </div>    
-
-         </div>
-        </div>
-    </div>        
-            
-            <Footer/>
+            </main>
+            <Footer />
         </div>
     );
 };
