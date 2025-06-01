@@ -3,7 +3,7 @@ const local = 'http://localhost:5000'
 const production = 'https://soug-elfalah-backend-6.onrender.com'
 
 let api_url =''
-let mode ='pro'
+let mode =''
 if (mode === 'pro'){
     api_url = production
 }else{

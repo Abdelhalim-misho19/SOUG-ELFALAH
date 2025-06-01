@@ -21,7 +21,7 @@ const Footer = () => {
                 {/* Logo and Contact Info */}
                 <div className='w-3/12 lg:w-4/12 sm:w-full'>
                     <div className='flex flex-col gap-4'>
-                        <img className="w-auto h-[210px] object-contain transition-all duration-300 ease-out group-hover:scale-105 filter brightness-110 group-hover:brightness-125" src="http://localhost:3000/images/logo2.png" alt="logo" />
+                        <img className="w-auto h-[210px] object-contain transition-all duration-300 ease-out group-hover:scale-105 filter brightness-110 group-hover:brightness-125" src="http://localhost:3000/images/logo-elfalah.png" alt="logo" />
                     </div>
                 </div>
 

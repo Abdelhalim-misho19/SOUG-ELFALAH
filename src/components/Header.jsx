@@ -3,7 +3,7 @@ import { MdEmail } from "react-icons/md";
 import { IoMdPhonePortrait } from "react-icons/io";
 import { FaFacebookF, FaList, FaLock, FaUser, FaBell, FaPhoneAlt } from "react-icons/fa";
 import { FaTwitter, FaLinkedin, FaGithub, FaHeart, FaCartShopping, FaGlobe } from "react-icons/fa6";
-import { IoMdArrowDropdown, IoIosArrowDown } from "react-icons/io"; 
+import { IoMdArrowDropdown, IoIosArrowDown } from "react-icons/io";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_card_products, get_wishlist_products } from '../store/reducers/cardReducer';
@@ -57,7 +57,7 @@ const Header = () => {
             dispatch(get_wishlist_products(userInfo.id));
             dispatch(fetchNotifications(userInfo.id));
 
-            const socket = io('http://localhost:5000');
+            const socket = io('http://localhost:5000'); // Ensure this is configurable for deployment
             socket.emit('add_user', userInfo.id);
             console.log(`Header: Emitted add_user for ${userInfo.id}`);
 
@@ -196,7 +196,7 @@ const Header = () => {
                     <div className='md-lg:w-full w-3/12 md-lg:pt-4'>
                         <div className='flex justify-between items-center'>
                             <Link to='/'>
-                                <img src="http://localhost:3000/images/logo2.png" alt="" className='w-[250px] h-[105px]'/>
+                                <img src="/images/logo-elfalah.png" alt="Soug El Falah Logo" className='w-[375px] h-[80px]'/>
                             </Link>
                             <div onClick={() => setShowShidebar(false)} className='lg:hidden md-lg:flex xl:hidden hidden p-2 bg-white text-slate-600 border border-slate-300 rounded-md cursor-pointer'>
                                 <FaList />
@@ -261,10 +261,10 @@ const Header = () => {
             {/* Mobile Sidebar */}
             <div className='hidden md-lg:block'>
                 <div onClick={() => setShowShidebar(true)} className={`fixed duration-200 transition-all ${showShidebar ? 'invisible' : 'visible'} hidden md-lg:block w-screen h-screen bg-[rgba(0,0,0,0.5)] top-0 left-0 z-20`}></div>
-                <div className={`w-[300px] z-[9999] transition-all duration-300 fixed ${showShidebar ? '-left-[300px]' : 'left-0 top-0'} overflow-y-auto bg-white h-screen py-6 px-8 shadow-lg`}>
+                <div className={`w-[300px] z-[300] transition-all duration-300 fixed ${showShidebar ? '-left-[300px]' : 'left-0 top-0'} overflow-y-auto bg-white h-screen py-6 px-8 shadow-lg`}>
                     <div className='flex justify-start flex-col gap-6'>
                         <Link to='/'>
-                            <img src="http://localhost:3000/images/logo2.png" alt="" className='h-10' />
+                            <img src="/images/logo-elfalah.png" alt="Soug El Falah Logo" className='h-10' />
                         </Link>
                         <div className='flex justify-start items-center gap-10'>
                             <div className='relative cursor-pointer text-slate-800 text-sm'>
